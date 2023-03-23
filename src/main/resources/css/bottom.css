@@ -1,0 +1,17 @@
+.bottom{
+        -fx-background-color: #232323;
+    }
+}
+
+.button {
+    -fx-background-color: transparent;
+}
+
+.bar {
+    -fx-background-color: black;
+}
+
+.progress-bar > .bar {
+    -fx-background-color: #9b4074;
+}
+

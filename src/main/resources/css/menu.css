@@ -1,0 +1,33 @@
+.menu {
+    -fx-background-color: #232323;
+}
+
+.button {
+    -fx-background-color: transparent;
+    -fx-text-fill: gray;
+}
+
+.button:hover {
+    -fx-text-fill: white;
+}
+
+.button:selected {
+    -fx-text-fill: white;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: white;
+}
+
+.txtField {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+
+.list-cell{
+ -fx-background-color: #232323;
+  -fx-text-fill: gray;
+  -fx-font-size:15.0;
+}
+

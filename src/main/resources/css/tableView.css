@@ -1,0 +1,60 @@
+.table-view{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: #232323;
+    -fx-padding: 0 0 5px 0;
+    -fx-text-fill: white;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-border-color: transparent;
+    -fx-padding: 2 0 2 10px;
+}
+
+.table-row-cell: odd{
+    -fx-background-color:  #232323;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+.table-row-cell: even{
+    -fx-background-color:   #232323;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+.table-cell {
+    -fx-border-color: transparent -fx-box-border transparent transparent;
+    -fx-text-fill: white;
+}
+
+.table-view:row-selection .table-row-cell:filled:hover {
+    -fx-background-color: #9b4074;
+}
+
+.table-view:row-selection .table-row-cell:filled:selected:hover {
+    -fx-background-color: #9b4074;
+}
+
+.table-view:row-selection .table-row-cell:filled:selected {
+    -fx-background-color: #9b4074;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
