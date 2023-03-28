@@ -12,6 +12,7 @@ public class Cancion {
     String album;
     String nombreFichero;
 
+
     public String getAlbum() {
         return album;
     }
