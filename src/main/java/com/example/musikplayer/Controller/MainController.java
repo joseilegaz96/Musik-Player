@@ -1,6 +1,9 @@
 package com.example.musikplayer.Controller;
 
+import com.example.musikplayer.Conexion.ConexionSQL;
 import com.example.musikplayer.Main;
+import com.example.musikplayer.Repositorio.Implementaciones.CancionesSQL;
+import com.mpatric.mp3agic.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,9 +23,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Time;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.sql.*;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainController {
@@ -43,9 +46,11 @@ public class MainController {
     private MediaPlayer mp;
     private String userDir = System.getProperty("user.home");
 
+
     private ObservableList<String> savePlayListName = FXCollections.observableArrayList();
 
     public void  initialize() {
+        aniadirCanciones();
         iconPlay.setVisible(false);
         listaCanciones.setBackground(new Background(new BackgroundFill(Color.valueOf("#232323"), null, null)));
         listaCanciones.setVisible(false);
@@ -61,6 +66,68 @@ public class MainController {
         });
     }
 
+    public ArrayList<String> comprobarCanciones() {
+        String ruta = userDir + "/Musik";
+        File file = new File(ruta);
+        String[] arrayFicheroDirectorio = file.list();
+
+        ArrayList<String> cancionesBaseDatos = new ArrayList<>();
+        List<String> cancionesDirectorio = Arrays.asList(arrayFicheroDirectorio);
+        ArrayList<String> diferencias = new ArrayList<>(cancionesDirectorio);
+        ArrayList<String> anydirCanciones = new ArrayList<>();
+
+        CancionesSQL cancionesSQL = new CancionesSQL();
+        cancionesSQL.GetNameFiles().forEach(cancion -> {
+            cancionesBaseDatos.add(cancion.getNombreFichero());
+        });
+
+        diferencias.removeAll(cancionesBaseDatos);
+
+        Iterator<String> iterator = diferencias.iterator();
+        while (iterator.hasNext()) {
+             anydirCanciones.add(iterator.next());
+        }
+        return anydirCanciones;
+    }
+
+
+    public void aniadirCanciones() {
+        ArrayList<String> listaCanciones = comprobarCanciones();
+        Mp3File mp3file = null;
+        for (String canciones : listaCanciones) {
+            try {
+            mp3file = new Mp3File(userDir + "/Musik/"+canciones);
+            CancionesSQL cancionesSQL = new CancionesSQL();
+            int id = cancionesSQL.lastId();
+                if (mp3file.hasId3v2Tag()) {
+                    ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+                    long duracion = mp3file.getLengthInMilliseconds();
+                    Time time = new Time(duracion);
+                    String artista = id3v2Tag.getArtist();
+                    String titulo = id3v2Tag.getTitle();
+                    String album =  id3v2Tag.getAlbum();
+                    String genero = id3v2Tag.getGenreDescription();
+                    String nombre = id3v2Tag.getAudioSourceUrl();
+                    System.out.println(nombre);
+                    cancionesSQL.insert(id+1,nombre,time,genero,2,"Musik",canciones,album);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (UnsupportedTagException e) {
+                throw new RuntimeException(e);
+            } catch (InvalidDataException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+
+    /*public void eliminarCanciones() {
+        ArrayList<String> listaCanciones = comprobarCanciones();
+        for (String cancion: listaCanciones) {
+            if(cancion.equals())
+        }
+    }*/
 
     public void playSong(ActionEvent actionEvent) {
         progressBar();
@@ -103,16 +170,8 @@ public class MainController {
             txtNombreCancion.setText(tableViewController.getNombreCancion());*/
         }
 
-        mp.currentTimeProperty().addListener((observableValue, oldDuration, newDuration) -> {
-            double tiempo = mp.getCurrentTime().toMinutes();
-            Time duracio = tableViewController.getDuracion();
-
-            System.out.println(tiempo);
-            System.out.println(duracio);
-        });
-
-
     }
+
 
     public void progressBar() {
         timer = new Timer();
@@ -120,9 +179,7 @@ public class MainController {
             @Override
             public void run() {
                 running = true;
-
                 double current = mp.getCurrentTime().toSeconds();
-
                 double end = media.getDuration().toSeconds();
                 System.out.println(current/end);
                 durationBar.setProgress(current/end);

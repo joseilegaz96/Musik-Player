@@ -1,9 +1,8 @@
 package com.example.musikplayer.Conexion;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javafx.scene.control.Alert;
+
+import java.sql.*;
 
 public class ConexionSQL {
     private String url = "jdbc:mysql://127.0.0.1:3306/musica";
@@ -16,14 +15,17 @@ public class ConexionSQL {
     public void conectar() {
         try {
             conectar = DriverManager.getConnection(url,user,password);
-            System.out.println("Conectado");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e+"No se ha podido conectar");
         }
     }
 
     public Statement createStatement() throws SQLException {
         return conectar.createStatement();
+    }
+
+    public PreparedStatement createPreparedStatement(String sql) throws SQLException {
+        return conectar.prepareStatement(sql);
     }
 
 

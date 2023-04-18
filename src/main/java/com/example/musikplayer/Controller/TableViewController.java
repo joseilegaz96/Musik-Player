@@ -73,11 +73,16 @@ public class TableViewController {
     }
 
 
-    public void selectItem(MouseEvent mouseEvent) {
+    public String[] selectItem(MouseEvent mouseEvent) {
         if(mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
             if(mouseEvent.getClickCount() == 2) {
-                System.out.println("aaa");
+                String[] cancion = new String[2];
+                cancion[0] = getRuta();
+                cancion[1] = getNombreCancion();
+                return cancion;
             }
         }
+
+        return new String[0];
     }
 }

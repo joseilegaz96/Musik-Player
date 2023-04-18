@@ -7,6 +7,7 @@ module com.example.musikplayer {
     requires javafx.media;
     requires jakarta.persistence;
     requires java.sql;
+    requires mp3agic;
 
     opens com.example.musikplayer to javafx.fxml;
     opens com.example.musikplayer.Controller to javafx.fxml;

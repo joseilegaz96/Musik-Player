@@ -79,12 +79,6 @@ public class Cancion {
 
     @Override
     public String toString() {
-        return "Cancion{" +
-                "id=" + id +
-                ", nombreCancion='" + nombreCancion + '\'' +
-                ", duracion=" + duracion +
-                ", genero='" + genero + '\'' +
-                ", artista=" + artista +
-                '}';
+        return nombreFichero;
     }
 }
