@@ -2,18 +2,18 @@ package com.example.musikplayer.Repositorio.Implementaciones;
 
 import com.example.musikplayer.Conexion.ConexionSQL;
 import com.example.musikplayer.Repositorio.DAO.Cancion;
-import com.example.musikplayer.Repositorio.Contratos.Repositorio;
+import com.example.musikplayer.Repositorio.Contratos.RepositorioCanciones;
 
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CancionesSQL implements Repositorio<Cancion> {
+public class CancionesSQL implements RepositorioCanciones<Cancion> {
     ConexionSQL conectar = new ConexionSQL();
 
     @Override
-    public List<Cancion> GetAll() {
+    public List<Cancion> GetAllCanciones() {
         List<Cancion> canciones = new ArrayList<>();
         String sql = "SELECT c.id,c.nombre_cancion,c.duracion,c.genero,c.ruta,c.nombre_fichero,c.album,a.artista FROM canciones c  INNER JOIN  artista a ON c.artista = a.id";
         conectar.conectar();
@@ -103,11 +103,6 @@ public class CancionesSQL implements Repositorio<Cancion> {
 
     @Override
     public boolean update(int id) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(int id) {
         return false;
     }
 }

@@ -2,6 +2,9 @@ package com.example.musikplayer.Controller;
 
 import com.example.musikplayer.Conexion.ConexionSQL;
 import com.example.musikplayer.Main;
+import com.example.musikplayer.Repositorio.DAO.Artista;
+import com.example.musikplayer.Repositorio.DAO.Cancion;
+import com.example.musikplayer.Repositorio.Implementaciones.ArtistaSQL;
 import com.example.musikplayer.Repositorio.Implementaciones.CancionesSQL;
 import com.mpatric.mp3agic.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -11,24 +14,29 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
 public class MainController {
+
     public Button btnPlayPuase;
     public Text txtNombreCancion;
     public Text txtNombreArtista;
@@ -50,8 +58,9 @@ public class MainController {
     private ObservableList<String> savePlayListName = FXCollections.observableArrayList();
 
     public void  initialize() {
+        crearDirecotorio();
         aniadirCanciones();
-        iconPlay.setVisible(false);
+        eliminarCanciones();
         listaCanciones.setBackground(new Background(new BackgroundFill(Color.valueOf("#232323"), null, null)));
         listaCanciones.setVisible(false);
         txtFieldLista.setVisible(false);
@@ -101,15 +110,24 @@ public class MainController {
             int id = cancionesSQL.lastId();
                 if (mp3file.hasId3v2Tag()) {
                     ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-                    long duracion = mp3file.getLengthInMilliseconds();
-                    Time time = new Time(duracion);
-                    String artista = id3v2Tag.getArtist();
+                    int duracion = (int)(mp3file.getLengthInMilliseconds()/1000);
+                    Time time = new Time(0,duracion/60,duracion%60);
+                    int artista = obtenerArtista(id3v2Tag.getArtist());
                     String titulo = id3v2Tag.getTitle();
                     String album =  id3v2Tag.getAlbum();
                     String genero = id3v2Tag.getGenreDescription();
-                    String nombre = id3v2Tag.getAudioSourceUrl();
-                    System.out.println(nombre);
-                    cancionesSQL.insert(id+1,nombre,time,genero,2,"Musik",canciones,album);
+
+
+
+                    if(titulo == null) {
+                        titulo = canciones;
+                    }
+
+                    if(album == null) {
+                        album = "Desconocido";
+                    }
+
+                    cancionesSQL.insert(id+1,titulo,time,genero,artista,"Musik",canciones,album);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -119,58 +137,64 @@ public class MainController {
                 throw new RuntimeException(e);
             }
         }
-
     }
 
-    /*public void eliminarCanciones() {
-        ArrayList<String> listaCanciones = comprobarCanciones();
-        for (String cancion: listaCanciones) {
-            if(cancion.equals())
+    private int obtenerArtista(String nombreArtista) {
+        if(nombreArtista == null ) {
+           return 1;
+        } else {
+            ArtistaSQL artistaSQL = new ArtistaSQL();
+            Artista nuevoArstista = artistaSQL.GetAllArtista(nombreArtista);
+            if(nuevoArstista == null) {
+                artistaSQL.InsertarArtista(nombreArtista);
+                Artista crearArtista = artistaSQL.GetAllArtista(nombreArtista);
+                return crearArtista.getId();
+            }
+            return nuevoArstista.getId();
         }
-    }*/
+    }
+    public void eliminarCanciones() {}
+
+    public void crearDirecotorio() {
+        File directorio = new File(userDir+"/Musik3");
+        if(!directorio.exists()) {
+            directorio.mkdirs();
+        }
+    }
 
     public void playSong(ActionEvent actionEvent) {
         progressBar();
         TableViewController tableViewController = Main.saveFxml.getController();
 
         if(mp == null) {
-            media = new Media(new File(userDir + "/" + tableViewController.getRuta()).toURI() + "/" + tableViewController.getNombreCancion());
+            File file = new File(userDir + "/" + tableViewController.getRuta() + "/" + tableViewController.getNombreCancion());
+            media = new Media(file.toURI().toASCIIString());
             mp = new MediaPlayer(media);
             mp.play();
-
-            /*txtNombreArtista.setText(tableViewController.getNombreArtista());
-            txtNombreCancion.setText(tableViewController.getNombreCancion());*/
         }
 
         MediaPlayer.Status status = mp.getStatus();
-        if(mp != null) {
-            if(status.equals(MediaPlayer.Status.PLAYING)) {
-                mp.pause();
-                cancelTimer();
-                /*txtNombreArtista.setText(tableViewController.getNombreArtista());
-                txtNombreCancion.setText(tableViewController.getNombreCancion());*/
-            } else {
-                mp.play();
-                progressBar();
 
-            }
-        }
 
-        String[] parts = media.getSource().split("/");
-        String cargadoDesdeMedia = parts[6];
-        String datoClickadoTableView = tableViewController.getNombreCancion();
 
-        if(!cargadoDesdeMedia.equals(datoClickadoTableView)) {
+        if(!tableViewController.getNombreCancion().equals(mp.getMedia())) {
+            if(!mp.equals(MediaPlayer.Status.PLAYING))
             mp.stop();
-            media = new Media(new File(userDir + "/" + tableViewController.getRuta()).toURI() + "/" + tableViewController.getNombreCancion());
+            File file = new File(userDir + "/" + tableViewController.getRuta() + "/" + tableViewController.getNombreCancion());
+            media = new Media(file.toURI().toASCIIString());
             mp = new MediaPlayer(media);
             mp.play();
-
-            /*txtNombreArtista.setText(tableViewController.getNombreArtista());
-            txtNombreCancion.setText(tableViewController.getNombreCancion());*/
         }
 
+
+        if(mp.equals(MediaPlayer.Status.PLAYING)) {
+            mp.pause();
+        } else {
+            mp.play();
+        }
     }
+
+
 
 
     public void progressBar() {
@@ -181,7 +205,6 @@ public class MainController {
                 running = true;
                 double current = mp.getCurrentTime().toSeconds();
                 double end = media.getDuration().toSeconds();
-                System.out.println(current/end);
                 durationBar.setProgress(current/end);
                 if(current/end == 1) {
                     cancelTimer();
@@ -208,7 +231,8 @@ public class MainController {
         if(status.equals(MediaPlayer.Status.PLAYING) || (status.equals(MediaPlayer.Status.PAUSED))) {
             mp.stop();
             tableViewController.nextSong();
-            media = new Media(new File(userDir+"/"+tableViewController.getRuta()).toURI()+"/"+tableViewController.getNombreCancion());
+            File file = new File(userDir + "/" + tableViewController.getRuta() + "/" + tableViewController.getNombreCancion());
+            media = new Media(file.toURI().toASCIIString());
             mp = new MediaPlayer(media);
             mp.play();
 
@@ -224,22 +248,25 @@ public class MainController {
         if (status.equals(MediaPlayer.Status.PLAYING) || (status.equals(MediaPlayer.Status.PAUSED))) {
             mp.stop();
             tableViewController.previusSong();
-            media = new Media(new File(userDir+"/"+tableViewController.getRuta()).toURI()+"/"+tableViewController.getNombreCancion());
+            File file = new File(userDir + "/" + tableViewController.getRuta() + "/" + tableViewController.getNombreCancion());
+            media = new Media(file.toURI().toASCIIString());
             mp = new MediaPlayer(media);
-
             mp.play();
+
+
             /*txtNombreArtista.setText(tableViewController.getNombreArtista());
             txtNombreCancion.setText(tableViewController.getNombreCancion());*/
         }
     }
 
     public void loadMusic(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("tableViewView.fxml"));
         try {
-            Main.mainScene.setCenter(fxmlLoader.load());
+            AnchorPane fxmlLoader = FXMLLoader.load(getClass().getClassLoader().getResource("resources/tableViewView.fxml"));
+            Main.mainScene.setCenter(fxmlLoader);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     public void loadSearch(ActionEvent actionEvent) {
@@ -283,4 +310,20 @@ public class MainController {
     public void deleteValue(ActionEvent actionEvent) {
     }
 
+    public void loadBuscar(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/searhView.fxml"));
+        Main.mainScene.setCenter(root);
+    }
+
+    public void loadHome(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/tableViewView.fxml.fxml"));
+        Main.mainScene.setCenter(root);
+    }
+
+    public void pauseSong(MouseEvent mouseEvent) {
+        TableViewController tableViewController = Main.saveFxml.getController();
+        MediaPlayer.Status status = mp.getStatus();
+
+
+    }
 }

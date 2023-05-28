@@ -1,5 +1,5 @@
 .bottom{
-        -fx-background-color: #232323;
+        -fx-background-color: #444444;
     }
 }
 
@@ -7,11 +7,20 @@
     -fx-background-color: transparent;
 }
 
-.bar {
-    -fx-background-color: black;
+.progress-bar {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 10px;
+
 }
 
-.progress-bar > .bar {
-    -fx-background-color: #9b4074;
+.progress-bar .track {
+    -fx-background-radius: 10;
+    -fx-background-color: #9e9e9e;
+
+}
+
+.progress-bar .bar {
+    -fx-background-color: #7457e8;
+    -fx-border-radius: 50px;
 }
 

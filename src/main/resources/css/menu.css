@@ -1,10 +1,10 @@
 .menu {
-    -fx-background-color: #232323;
+     -fx-background-color: linear-gradient(to bottom, #5067d7, #a16bb9);
 }
 
 .button {
     -fx-background-color: transparent;
-    -fx-text-fill: gray;
+    -fx-text-fill: #98a5eb;
 }
 
 .button:hover {

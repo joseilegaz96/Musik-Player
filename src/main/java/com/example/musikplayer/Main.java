@@ -17,9 +17,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/mainView.fxml"));
         mainScene = fxmlLoader.load();
-        saveFxml = new FXMLLoader(getClass().getResource("tableViewView.fxml"));
+        saveFxml = new FXMLLoader(getClass().getResource("/tableViewView.fxml"));
         mainScene.setCenter(saveFxml.load());
         Scene scene = new Scene(mainScene);
         stage.setMinHeight(757);

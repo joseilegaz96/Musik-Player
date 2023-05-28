@@ -16,29 +16,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="757.0" prefWidth="1266.0" styleClass="pane" stylesheets="@../../../css/windows.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.musikplayer.Controller.MainController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="757.0" prefWidth="1266.0" styleClass="pane" stylesheets="@css/windows.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.musikplayer.Controller.MainController">
     <left>
-        <VBox fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="697.0" minWidth="232.0" prefHeight="697.0" prefWidth="232.0" styleClass="menu" stylesheets="@../../../css/menu.css">
+        <VBox fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="697.0" minWidth="232.0" prefHeight="697.0" prefWidth="232.0" styleClass="menu" stylesheets="@css/menu.css">
             <children>
-                <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadMusic" prefHeight="64.0" prefWidth="214.0" text="Inicio">
-                    <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="HOME" scaleX="2.0" scaleY="2.0" styleClass="iconHouse" text="" translateX="-9.0" wrappingWidth="18.142857551574707" />
-                    </graphic>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </Button>
-                <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadSearch" prefHeight="64.0" prefWidth="213.0" text="Buscar">
-                    <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" scaleX="2.0" scaleY="2.0" text="" translateX="-9.0" wrappingWidth="16.142858505249023" />
-                    </graphic>
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </Button>
+            <Button mnemonicParsing="false" onAction="#loadHome" prefHeight="67.0" prefWidth="216.0" text="Home          ">
+               <graphic>
+                  <FontAwesomeIconView fill="#fcfcfc" glyphName="HOME" scaleX="2.0" scaleY="2.0" text=" " translateX="-20.0" />
+               </graphic></Button>
                 <Text fill="#f8f8f8" strokeType="OUTSIDE" strokeWidth="0.0" text="TUS LISTAS">
                     <font>
                         <Font name="System Bold" size="12.0" />
@@ -58,7 +43,7 @@
                         <Font size="14.0" />
                     </font>
                 </Button>
-                <TextField fx:id="txtFieldLista" onKeyPressed="#addPlayList" prefHeight="12.0" prefWidth="129.0" promptText="Nombre PlayList" styleClass="txtField" stylesheets="@../../../css/menu.css">
+                <TextField fx:id="txtFieldLista" onKeyPressed="#addPlayList" prefHeight="12.0" prefWidth="129.0" promptText="Nombre PlayList" styleClass="txtField" stylesheets="@css/menu.css">
                     <VBox.margin>
                         <Insets bottom="10.0" left="37.0" top="15.0" />
                     </VBox.margin></TextField>
@@ -80,50 +65,47 @@
         </VBox>
     </left>
    <bottom>
-      <HBox prefHeight="60.0" prefWidth="1142.0" styleClass="bottom" stylesheets="@../../../css/bottom.css" BorderPane.alignment="CENTER">
+      <HBox prefHeight="43.0" prefWidth="1266.0" styleClass="bottom" stylesheets="@css/bottom.css" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="60.0" prefWidth="107.0" translateX="50.0">
+            <AnchorPane prefHeight="43.0" prefWidth="147.0" translateX="46.0">
                <children>
-                  <Button layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#previusSong">
+                  <Button layoutX="12.0" layoutY="10.0" mnemonicParsing="false" onAction="#previusSong">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="STEP_BACKWARD" scaleX="2.0" scaleY="2.0" wrappingWidth="10.071428298950195" />
                      </graphic></Button>
-                  <Button layoutX="84.0" layoutY="18.0" mnemonicParsing="false" onAction="#nextSong">
+                  <Button layoutX="84.0" layoutY="10.0" mnemonicParsing="false" onAction="#nextSong">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="STEP_FORWARD" scaleX="2.0" scaleY="2.0" />
-                     </graphic>
-                  </Button>
-                  <Button fx:id="btnPlayPuase" layoutX="48.0" layoutY="18.0" mnemonicParsing="false" onAction="#playSong">
+                     </graphic></Button>
+                  <Button fx:id="btnPlayPuase" layoutX="45.0" layoutY="10.0" mnemonicParsing="false" onAction="#playSong" onMouseClicked="#pauseSong">
                      <graphic>
-                        <FontAwesomeIconView fill="#9b4074" glyphName="PAUSE_CIRCLE" scaleX="3.0" scaleY="3.0" />
-                     </graphic>
-                  </Button>
+                        <FontAwesomeIconView fx:id="iconPlay" fill="#9c3142" glyphName="PAUSE_CIRCLE" scaleX="2.2" scaleY="2.2" />
+                     </graphic></Button>
                </children>
                <HBox.margin>
                   <Insets />
                </HBox.margin>
             </AnchorPane>
-            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="982.0" stylesheets="@../../../css/sliderBottomControl.css" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER" prefHeight="44.0" prefWidth="1078.0" stylesheets="@css/sliderBottomControl.css" HBox.hgrow="ALWAYS">
                <children>
                   <Button mnemonicParsing="false" onAction="#muteVolume" prefHeight="25.0" prefWidth="34.0" text="Button">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="VOLUME_UP" scaleX="2.0" scaleY="2.0" />
                      </graphic>
                   </Button>
-                  <Slider fx:id="volumen" prefHeight="12.0" prefWidth="162.0">
+                  <Slider fx:id="volumen" prefHeight="12.0" prefWidth="116.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin></Slider>
-                  <ProgressBar fx:id="durationBar" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="884.0" progress="0.0" stylesheets="@../../../css/bottom.css" translateX="65.0" HBox.hgrow="ALWAYS">
+                  <ProgressBar fx:id="durationBar" maxWidth="1.7976931348623157E308" prefHeight="13.0" prefWidth="900.0" progress="0.0" stylesheets="@css/bottom.css" translateX="65.0" HBox.hgrow="ALWAYS">
                      <HBox.margin>
-                        <Insets right="150.0" />
+                        <Insets right="100.0" />
                      </HBox.margin></ProgressBar>
                </children>
                <HBox.margin>
                   <Insets left="70.0" />
                </HBox.margin>
             </HBox>
-            <FontAwesomeIconView fx:id="iconPlay" fill="#9b4074" glyphName="PLAY_CIRCLE" scaleX="3.0" scaleY="3.0" translateX="-1150.0" translateY="21.0" />
          </children>
       </HBox>
    </bottom>
