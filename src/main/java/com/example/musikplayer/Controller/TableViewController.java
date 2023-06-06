@@ -1,26 +1,26 @@
 package com.example.musikplayer.Controller;
 
+import com.example.musikplayer.Conexion.ConexionSQL;
 import com.example.musikplayer.Repositorio.DAO.Cancion;
 import com.example.musikplayer.Repositorio.Implementaciones.CancionesSQL;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+
+import java.io.File;
 import java.sql.Time;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+
 
 public class TableViewController {
 
     public TextField search;
+    public ContextMenu menuItem;
+    public Button eliminarCancion;
     @FXML
     private TableColumn<Cancion, String> columnAlbum;
 
@@ -42,7 +42,9 @@ public class TableViewController {
     @FXML
     private ObservableList<Cancion> listaDeCanciones = FXCollections.observableArrayList();
     CancionesSQL cancionesSQL = new CancionesSQL();
-    Cancion cancion = new Cancion();
+
+    private String userDir = System.getProperty("user.home");
+
 
     public void initialize() {
         //System.out.println(cancionesSQL.GetAll());
@@ -74,8 +76,12 @@ public class TableViewController {
         SortedList<Cancion> sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(tabla.comparatorProperty());
         tabla.setItems(sortedList);
+
     }
 
+    public void addMenu(String itemMenu) {
+        menuItem.getItems().add((new MenuItem(itemMenu)));
+    }
     public Time getDuracion() {
         return tabla.getSelectionModel().getSelectedItem().getDuracion();
     }
@@ -99,17 +105,19 @@ public class TableViewController {
         tabla.getSelectionModel().selectPrevious();
     }
 
+    public void deleteSong(ActionEvent actionEvent) {
+        Cancion cancion = tabla.getSelectionModel().getSelectedItem();
+        File ficheroCancion = new File(userDir+"/"+getRuta()+"/"+getNombreCancion());
 
-    public String[] selectItem(MouseEvent mouseEvent) {
-        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-            if(mouseEvent.getClickCount() == 2) {
-                String[] cancion = new String[2];
-                cancion[0] = getRuta();
-                cancion[1] = getNombreCancion();
-                return cancion;
-            }
+        cancionesSQL.delete(getNombreCancion());
+
+        if(ficheroCancion.delete()) {
+            System.out.println("Fichero borrado");
+        } else {
+            System.out.println("fichero no borrado");
         }
 
-        return new String[0];
+        listaDeCanciones.remove(cancion);
+
     }
 }

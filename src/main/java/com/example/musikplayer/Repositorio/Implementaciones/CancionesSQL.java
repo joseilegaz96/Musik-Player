@@ -3,6 +3,7 @@ package com.example.musikplayer.Repositorio.Implementaciones;
 import com.example.musikplayer.Conexion.ConexionSQL;
 import com.example.musikplayer.Repositorio.DAO.Cancion;
 import com.example.musikplayer.Repositorio.Contratos.RepositorioCanciones;
+import javafx.scene.control.Alert;
 
 
 import java.sql.*;
@@ -15,7 +16,8 @@ public class CancionesSQL implements RepositorioCanciones<Cancion> {
     @Override
     public List<Cancion> GetAllCanciones() {
         List<Cancion> canciones = new ArrayList<>();
-        String sql = "SELECT c.id,c.nombre_cancion,c.duracion,c.genero,c.ruta,c.nombre_fichero,c.album,a.artista FROM canciones c  INNER JOIN  artista a ON c.artista = a.id";
+        String sql = "SELECT c.id,c.nombre_cancion,c.duracion,c.genero,c.ruta,c.nombre_fichero,c.album,a.artista FROM canciones c  " +
+                "INNER JOIN  artista a ON c.artista = a.id";
         conectar.conectar();
 
         try(Statement stm = conectar.createStatement();
@@ -104,5 +106,20 @@ public class CancionesSQL implements RepositorioCanciones<Cancion> {
     @Override
     public boolean update(int id) {
         return false;
+    }
+
+    @Override
+    public boolean delete(String nombreCancion) {
+        String SQL_INSERT = "DELETE FROM canciones WHERE nombre_fichero LIKE ?";
+        conectar.conectar();
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = conectar.createPreparedStatement(SQL_INSERT);
+            preparedStatement.setString(1,nombreCancion);
+            preparedStatement.execute();
+            return  true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

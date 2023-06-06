@@ -10,4 +10,5 @@ public interface RepositorioCanciones<T> {
     void GetId(int id);
     void insert(int id,String nombre_cancion, Time duracion, String genero, int artista, String ruta, String nombre_fichero, String album);
     boolean update(int id);
+    boolean delete(String nombreCancion);
 }

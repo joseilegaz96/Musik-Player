@@ -16,7 +16,10 @@ public class ConexionSQL {
         try {
             conectar = DriverManager.getConnection(url,user,password);
         } catch (SQLException e) {
-            throw new RuntimeException(e+"No se ha podido conectar");
+          Alert alert = new Alert(Alert.AlertType.ERROR,e.getMessage());
+          alert.setTitle("SQL Connection Failure");
+          alert.setHeaderText("La base de datos no esta arrancada");
+          alert.showAndWait();
         }
     }
 

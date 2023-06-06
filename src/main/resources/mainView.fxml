@@ -6,7 +6,6 @@
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -20,7 +19,7 @@
     <left>
         <VBox fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="697.0" minWidth="232.0" prefHeight="697.0" prefWidth="232.0" styleClass="menu" stylesheets="@css/menu.css">
             <children>
-            <Button mnemonicParsing="false" onAction="#loadHome" prefHeight="67.0" prefWidth="216.0" text="Home          ">
+            <Button mnemonicParsing="false" prefHeight="67.0" prefWidth="216.0" text="Home          ">
                <graphic>
                   <FontAwesomeIconView fill="#fcfcfc" glyphName="HOME" scaleX="2.0" scaleY="2.0" text=" " translateX="-20.0" />
                </graphic></Button>
@@ -77,7 +76,7 @@
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="STEP_FORWARD" scaleX="2.0" scaleY="2.0" />
                      </graphic></Button>
-                  <Button fx:id="btnPlayPuase" layoutX="45.0" layoutY="10.0" mnemonicParsing="false" onAction="#playSong" onMouseClicked="#pauseSong">
+                  <Button fx:id="btnPlayPuase" layoutX="45.0" layoutY="10.0" mnemonicParsing="false" onAction="#playSong">
                      <graphic>
                         <FontAwesomeIconView fx:id="iconPlay" fill="#9c3142" glyphName="PAUSE_CIRCLE" scaleX="2.2" scaleY="2.2" />
                      </graphic></Button>
@@ -86,21 +85,29 @@
                   <Insets />
                </HBox.margin>
             </AnchorPane>
-            <HBox alignment="CENTER" prefHeight="44.0" prefWidth="1078.0" stylesheets="@css/sliderBottomControl.css" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER" prefHeight="43.0" prefWidth="1160.0" stylesheets="@css/sliderBottomControl.css" HBox.hgrow="ALWAYS">
                <children>
                   <Button mnemonicParsing="false" onAction="#muteVolume" prefHeight="25.0" prefWidth="34.0" text="Button">
                      <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="VOLUME_UP" scaleX="2.0" scaleY="2.0" />
+                        <FontAwesomeIconView fill="WHITE" glyphName="VOLUME_UP" scaleX="2.0" scaleY="2.0" text="" />
                      </graphic>
                   </Button>
                   <Slider fx:id="volumen" prefHeight="12.0" prefWidth="116.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin></Slider>
-                  <ProgressBar fx:id="durationBar" maxWidth="1.7976931348623157E308" prefHeight="13.0" prefWidth="900.0" progress="0.0" stylesheets="@css/bottom.css" translateX="65.0" HBox.hgrow="ALWAYS">
+                  <Text fx:id="starSong" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00">
                      <HBox.margin>
-                        <Insets right="100.0" />
-                     </HBox.margin></ProgressBar>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" translateY="1.0" />
+                  <Slider fx:id="timeBar" prefHeight="12.0" prefWidth="738.0" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets left="10.0" right="30.0" />
+                     </HBox.margin>
+                  </Slider>
+                  <Text fx:id="endSong" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00" translateX="-20.0" />
                </children>
                <HBox.margin>
                   <Insets left="70.0" />
